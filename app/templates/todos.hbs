@@ -2,10 +2,15 @@
 
 <section id="main">
     <ul id="todo-list">
-        {{#each todo in model}}
-            <li {{bind-attr class="todo.isCompleted:completed"}}>
-                {{input type="checkbox" checked=todo.isCompleted class="toggle"}}
-                <label>{{todo.title}} {{todo.isCompleted}}</label><button class="destroy"></button>
+        {{#each todo in content itemController="todo"}}
+            <li {{bind-attr class="todo.model.isCompleted:completed todo.model.isEditing:editing"}}>
+                {{#if todo.model.isEditing}}
+                    {{input type="text" class="edit" value=todo.model.title focus-out="acceptChanges" insert-newline="acceptChanges"}}
+                {{else}}
+                    {{input type="checkbox" checked=todo.model.isCompleted class="toggle"}}
+                    <label {{action "editTodo" on="doubleClick"}}>{{todo.model.title}}</label>
+                    <button {{action "removeTodo"}} class="destroy"></button>
+                {{/if}}
             </li>
         {{/each}}
     </ul>
